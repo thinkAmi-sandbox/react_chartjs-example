@@ -16,11 +16,24 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const PiechartPiechartwithlegendontherightLazyImport = createFileRoute(
+  '/pie_chart/pie_chart_with_legend_on_the_right',
+)()
 const PiechartFirstpiechartLazyImport = createFileRoute(
   '/pie_chart/first_pie_chart',
 )()
 
 // Create/Update Routes
+
+const PiechartPiechartwithlegendontherightLazyRoute =
+  PiechartPiechartwithlegendontherightLazyImport.update({
+    path: '/pie_chart/pie_chart_with_legend_on_the_right',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/pie_chart/pie_chart_with_legend_on_the_right.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const PiechartFirstpiechartLazyRoute = PiechartFirstpiechartLazyImport.update({
   path: '/pie_chart/first_pie_chart',
@@ -37,11 +50,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PiechartFirstpiechartLazyImport
       parentRoute: typeof rootRoute
     }
+    '/pie_chart/pie_chart_with_legend_on_the_right': {
+      preLoaderRoute: typeof PiechartPiechartwithlegendontherightLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([PiechartFirstpiechartLazyRoute])
+export const routeTree = rootRoute.addChildren([
+  PiechartFirstpiechartLazyRoute,
+  PiechartPiechartwithlegendontherightLazyRoute,
+])
 
 /* prettier-ignore-end */
