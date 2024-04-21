@@ -19,6 +19,9 @@ import { Route as rootRoute } from './routes/__root'
 const PiechartPiechartwithlegendontherightLazyImport = createFileRoute(
   '/pie_chart/pie_chart_with_legend_on_the_right',
 )()
+const PiechartPiechartwithalwaystextLazyImport = createFileRoute(
+  '/pie_chart/pie_chart_with_always_text',
+)()
 const PiechartFirstpiechartLazyImport = createFileRoute(
   '/pie_chart/first_pie_chart',
 )()
@@ -31,6 +34,16 @@ const PiechartPiechartwithlegendontherightLazyRoute =
     getParentRoute: () => rootRoute,
   } as any).lazy(() =>
     import('./routes/pie_chart/pie_chart_with_legend_on_the_right.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const PiechartPiechartwithalwaystextLazyRoute =
+  PiechartPiechartwithalwaystextLazyImport.update({
+    path: '/pie_chart/pie_chart_with_always_text',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/pie_chart/pie_chart_with_always_text.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -50,6 +63,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PiechartFirstpiechartLazyImport
       parentRoute: typeof rootRoute
     }
+    '/pie_chart/pie_chart_with_always_text': {
+      preLoaderRoute: typeof PiechartPiechartwithalwaystextLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/pie_chart/pie_chart_with_legend_on_the_right': {
       preLoaderRoute: typeof PiechartPiechartwithlegendontherightLazyImport
       parentRoute: typeof rootRoute
@@ -61,6 +78,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   PiechartFirstpiechartLazyRoute,
+  PiechartPiechartwithalwaystextLazyRoute,
   PiechartPiechartwithlegendontherightLazyRoute,
 ])
 
